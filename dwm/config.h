@@ -83,7 +83,8 @@ static const Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ NONE,				XK_Print, 	 spawn, 	  {.v = flameshotcmd} },
 	{ NONE,           0x1008ff13,    spawn,       {.v = increaseVOL } }, //RAISE
-	{ NONE,           0x1008ff14,    spawn,       {.v = playpause } }, //PLAY
+	{ NONE,           0x1008ff14,    spawn,       {.v = playpause } }, //PLAY	(play)
+	{ NONE,           0x1008ff31,    spawn,       {.v = playpause } }, //PLAY	(pause)
 	{ NONE,           0x1008ff11,    spawn,       {.v = decreaseVOL } }, //LOWER
 	{ MODKEY,           XK_bar,    spawn,       {.v = connectHeadset } },
 	{ MODKEY,			XK_F1,     spawn,	   {.v = shutdowncmd } }, //hypr
