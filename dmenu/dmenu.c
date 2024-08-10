@@ -490,7 +490,7 @@ insert:
 	case XK_Return:
 	case XK_KP_Enter:
 		if (strcmp(sel->text, "thorium-browser")==0){
-			puts((sel && !(ev->state & ShiftMask)) ? "thorium-browser --start-fullscreen" : text);
+			puts((sel && !(ev->state & ShiftMask)) ? "thorium-browser --new-window --app=http://192.168.1.36:8081/ --enable-features=OverlayScrollbar,OverlayScrollbarFlashAfterAnyScrollUpdate,OverlayScrollbarFlashWhenMouseEnter" : text);
 		}else{
 			puts((sel && !(ev->state & ShiftMask)) ? sel->text : text);
 		}

@@ -99,6 +99,8 @@ struct Client {
 	Window win;
 };
 
+
+
 typedef struct {
 	unsigned int mod;
 	KeySym keysym;
@@ -236,6 +238,7 @@ static int xerror(Display *dpy, XErrorEvent *ee);
 static int xerrordummy(Display *dpy, XErrorEvent *ee);
 static int xerrorstart(Display *dpy, XErrorEvent *ee);
 static void zoom(const Arg *arg);
+static void swapmon(const Arg *arg);
 
 /* variables */
 static const char broken[] = "broken";
@@ -2100,6 +2103,124 @@ wintoclient(Window w)
 				return c;
 	return NULL;
 }
+void
+swapmon(const Arg *arg){
+	if (!mons->next)return;
+	if(arg->i < 10 || arg->i % 11 == 0 || arg->i > 99) return;
+	Monitor *m2;
+	if ((m2 = numtomon(arg->i % 10)) == NULL) return;
+	Monitor *m1;
+	if ((m1 = numtomon((arg->i - (arg->i % 10)) / 10)) == NULL) return;
+	//Client *c;
+	//if(m1->clients && m1->clients->tags == m1->tagset[m1->seltags])	{sendmon(m1->clients,m2);}
+	//else if (m2->clients && m2->clients->tags == m2->tagset[m2->seltags]){
+	//	 sendmon(m2->clients,m1);
+	//}
+	Client *c[20];
+	Client *aux = m1->clients;
+	int i = 0;
+	if(aux){
+		for (i = 0; i<20 && aux; i++){
+			c[i] = aux;
+			aux = aux->next;
+		}
+	}
+	
+	aux = m2->clients;
+	int k;
+	if(aux){
+		if(i == 0){k = 0;}
+		else{ k = i;}
+	}
+	if(aux){
+		for ( ; k < 20 && aux; ++k){
+			fprintf(stderr,"\nForK: %d", k); //
+			c[k] = aux;
+			aux = aux->next;
+		}
+		--k;
+	}else{
+		k = 0;
+	}
+	fprintf(stderr,"\nI: %d", i); //1 [0]
+	fprintf(stderr,"\nK: %d", k); //1 [1]
+	int hm = i+k;
+	fprintf(stderr,"\nHM: %d", hm); //2 
+	while(hm > 0){
+		fprintf(stderr,"\nLoop I: %d", i); //1
+		fprintf(stderr,"\nLoop K: %d", k); //1
+		fprintf(stderr,"\nLoop HM: %d", hm);//2
+		if(i > 0){
+			fprintf(stderr,"\nSe envia I a M2: %d", i-1); //[0] 
+			sendmon(c[i-1],m2);
+			i--;
+		}
+		if(k > 0){
+			fprintf(stderr,"\nSe envia K a M1: %d", k); // [1]
+			sendmon(c[k],m1); // [1]
+			k--; //[0]
+		}
+		hm = i+k;
+	}
+	fprintf(stderr,"\nFIN: %d", i+k); //0
+	
+
+}
+
+/*
+void
+swapmon(const Arg *arg)
+{ 
+	if (!mons->next)return;
+	if(arg->i < 10 || arg->i % 11 == 0 || arg->i > 99) return;
+	Monitor *m2;
+	if ((m2 = numtomon(arg->i % 10)) == NULL) return;
+	Monitor *m1;
+	if ((m1 = numtomon((arg->i - (arg->i % 10)) / 10)) == NULL) return;
+	Client *c[10];
+	int i = 0;
+	while(m1->clients){
+		if(m1->clients->tags == m1->tagset[m1->seltags]){
+			c[i] = m1->clients;
+			unfocus(c[i], 1);
+			detach(c[i]);
+			detachstack(c[i]);
+			i++;
+		}
+	}
+	//arrange(m1);
+	while(m2->clients){
+		//sendmon(m2->clients, m1);
+		unfocus(m2->clients, 1);
+		detach(m2->clients);
+		detachstack(m2->clients);
+		m2->clients->mon = m1;
+		m2->clients->tags = m1->tagset[m1->seltags]; // assign tags of target monitor 
+		attachbottom(m2->clients);
+		attachstack(m2->clients);
+	}
+		focus(NULL);
+		arrange(NULL);
+	while(i > 0){
+		int e = 0;
+		c[e]->mon = m2;
+		c[e]->tags = m2->tagset[m2->seltags];
+		attachbottom(c[e]);
+		attachstack(c[e]);
+		i--;
+		e++;
+		//focus(NULL);
+		//arrange(NULL);
+	}
+		focus(NULL);
+		arrange(NULL);
+		
+	
+
+	//{.i  = 3 } }, //SONY (L)
+	//{.i  = 1 } }, //PHILPS (M)
+
+}*/
 
 Monitor *
 wintomon(Window w)

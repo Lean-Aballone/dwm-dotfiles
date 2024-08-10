@@ -13,6 +13,7 @@ static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
 static const char col_gray4[]       = "#eeeeee";
 static const char col_cyan[]        = "#005577";
+static const char col_wincyan[]        = "#087BD3";
 static const char col_magenta[]     = "#ff00ff";
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
@@ -38,7 +39,7 @@ static const Rule rules[] = {
 static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
 static const int nmaster     = 1;    /* number of clients in master area */
 static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
-static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen window */
+static const int lockfullscreen = 0; /* 1 will force focus on the fullscreen window */
 
 #include "fibonacci.c"
 static const Layout layouts[] = {
@@ -74,10 +75,13 @@ static const char *filemanagercmd[] = {"thunar", NULL };
 static const char *firefoxcmd[] = {"firefox", NULL };
 static const char *xfce4term[] = {"xfce4-terminal", NULL };
 static const char *connectHeadset[] = {"/home/lean/headsetConnect.sh", NULL };
-static const char *increaseVOL[] = {"wpctl", "set-volume", "@DEFAULT_AUDIO_SINK@", "5%+", NULL };
-static const char *decreaseVOL[] = {"wpctl", "set-volume", "@DEFAULT_AUDIO_SINK@", "5%-", NULL };
+//static const char *increaseVOL[] = {"wpctl", "set-volume", "@DEFAULT_AUDIO_SINK@", "5%+", NULL };
+//static const char *decreaseVOL[] = {"wpctl", "set-volume", "@DEFAULT_AUDIO_SINK@", "5%-", NULL };
+static const char *increaseVOL[] = {"/home/lean/scripts/Volume.sh", "--inc", NULL };
+static const char *decreaseVOL[] = {"/home/lean/scripts/Volume.sh", "--dec", NULL };
 static const char *playpause[] = {"playerctl","play-pause", NULL };
 static const char *flameshotcmd[] = {"flameshot", "gui", NULL };
+static const char *startWindows[] = {"/home/lean/win10VM.sh", NULL };
 
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -89,6 +93,7 @@ static const Key keys[] = {
 	{ MODKEY,           XK_bar,    spawn,       {.v = connectHeadset } },
 	{ MODKEY,			XK_F1,     spawn,	   {.v = shutdowncmd } }, //hypr
 	{ MODKEY,			XK_F2,     spawn,	   {.v = rebootcmd } }, //hypr
+	{ MODKEY,			XK_F10,    spawn, 		{.v = startWindows} },
 	{ MODKEY,             		XK_q, 	   spawn,          {.v = xfce4term  } }, //hypr 'st'
 	{ MODKEY|ShiftMask,             XK_q, 	   spawn,          {.v = termcmd } }, //hypr 'xfce4-terminal'
 	{ MODKEY,           		XK_c,      killclient,     {0} },  //hypr
@@ -120,15 +125,17 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
 	
+	{ MODKEY,  						XK_z, 	   swapmon, 		{.i = 30} },
+
 	{ MODKEY,                       XK_1,      focusnthmon,    {.i  = 3 } }, //SONY (L)
 	{ MODKEY,                       XK_2,      focusnthmon,    {.i  = 2 } }, //LG (UP)
-	{ MODKEY,                       XK_3,      focusnthmon,    {.i  = 1 } }, //PHILPS (M)
-	{ MODKEY,                       XK_4,      focusnthmon,    {.i  = 0 } }, //SAMSUNG (R)
+	{ MODKEY,                       XK_3,      focusnthmon,    {.i  = 0 } }, //PHILPS (M)
+	{ MODKEY,                       XK_4,      focusnthmon,    {.i  = 1 } }, //SAMSUNG (R)
 	
 	{ MODKEY|ShiftMask,             XK_1,      tagnthmon,      {.i  = 3 } }, //SONY (L)
 	{ MODKEY|ShiftMask,             XK_2,      tagnthmon,      {.i  = 2 } }, //LG (UP)
-	{ MODKEY|ShiftMask,             XK_3,      tagnthmon,      {.i  = 1 } }, //PHILPS (M)
-	{ MODKEY|ShiftMask,             XK_4,      tagnthmon,      {.i  = 0 } }, //SAMSUNG (R)
+	{ MODKEY|ShiftMask,             XK_3,      tagnthmon,      {.i  = 0 } }, //PHILPS (M)
+	{ MODKEY|ShiftMask,             XK_4,      tagnthmon,      {.i  = 1 } }, //SAMSUNG (R)
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
