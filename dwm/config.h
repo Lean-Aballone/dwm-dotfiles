@@ -3,6 +3,11 @@
 /* appearance */
 static const unsigned int borderpx  = 2;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
+static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
+static const unsigned int systrayonleft = 0;    /* 0: systray in the right corner, >0: systray on left of status text */
+static const unsigned int systrayspacing = 2;   /* systray spacing */
+static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display systray on the first monitor, False: display systray on the last monitor*/
+static const int showsystray        = 1;        /* 0 means no systray */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const int focusonwheel       = 0;
@@ -69,20 +74,21 @@ static const Layout layouts[] = {
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
 static const char *termcmd[]  = { "st", NULL };
-static const char *shutdowncmd[] = {"sudo", "/sbin/systemctl", "poweroff", NULL };
-static const char *rebootcmd[] = {"sudo", "/sbin/systemctl", "reboot", NULL };
+static const char *shutdowncmd[] = {"sudo", "/bin/systemctl", "poweroff", NULL };
+static const char *rebootcmd[] = {"sudo", "/bin/systemctl", "reboot", NULL };
+static const char *reboot2Windows[] = {"sudo","/sbin/bootctl","set-oneshot", "windows10.conf", NULL};
 static const char *filemanagercmd[] = {"thunar", NULL };
 static const char *firefoxcmd[] = {"firefox", NULL };
 static const char *xfce4term[] = {"xfce4-terminal", NULL };
-static const char *connectHeadset[] = {"/home/lean/headsetConnect.sh", NULL };
+static const char *connectHeadset[] = {"/home/lean/.dotfiles/scripts/headsetConnect.sh", NULL };
 //static const char *increaseVOL[] = {"wpctl", "set-volume", "@DEFAULT_AUDIO_SINK@", "5%+", NULL };
 //static const char *decreaseVOL[] = {"wpctl", "set-volume", "@DEFAULT_AUDIO_SINK@", "5%-", NULL };
-static const char *increaseVOL[] = {"/home/lean/scripts/Volume.sh", "--inc", NULL };
-static const char *decreaseVOL[] = {"/home/lean/scripts/Volume.sh", "--dec", NULL };
+static const char *increaseVOL[] = {"/home/lean/.dotfiles/scripts/Volume.sh", "--inc", NULL };
+static const char *decreaseVOL[] = {"/home/lean/.dotfiles/scripts/Volume.sh", "--dec", NULL };
 static const char *playpause[] = {"playerctl","play-pause", NULL };
 static const char *flameshotcmd[] = {"flameshot", "gui", NULL };
-static const char *startWindows[] = {"/home/lean/win10VM.sh", NULL };
-
+static const char *startWindows[] = {"/home/lean/.dotfiles/scripts/win10VM.sh", NULL };
+static const char *easyeffects[] = {"/home/lean/.dotfiles/scripts/easyeffects.sh","&>","/dev/null", NULL };
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ NONE,				XK_Print, 	 spawn, 	  {.v = flameshotcmd} },
@@ -91,8 +97,10 @@ static const Key keys[] = {
 	{ NONE,           0x1008ff31,    spawn,       {.v = playpause } }, //PLAY	(pause)
 	{ NONE,           0x1008ff11,    spawn,       {.v = decreaseVOL } }, //LOWER
 	{ MODKEY,           XK_bar,    spawn,       {.v = connectHeadset } },
+	{ MODKEY,           XK_a,    spawn,       {.v = easyeffects } },
 	{ MODKEY,			XK_F1,     spawn,	   {.v = shutdowncmd } }, //hypr
 	{ MODKEY,			XK_F2,     spawn,	   {.v = rebootcmd } }, //hypr
+	{ MODKEY|ShiftMask,			XK_F2,     spawn,	   {.v = reboot2Windows } },
 	{ MODKEY,			XK_F10,    spawn, 		{.v = startWindows} },
 	{ MODKEY,             		XK_q, 	   spawn,          {.v = xfce4term  } }, //hypr 'st'
 	{ MODKEY|ShiftMask,             XK_q, 	   spawn,          {.v = termcmd } }, //hypr 'xfce4-terminal'
@@ -124,7 +132,10 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
-	
+	{ MODKEY|ShiftMask,             XK_minus, 		setborderpx,    {.i = -1 } },
+	{ MODKEY|ShiftMask,             XK_plus, 		setborderpx,    {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_numbersign, 	setborderpx,    {.i = 0 } },
+
 	{ MODKEY,  						XK_z, 	   swapmon, 		{.i = 30} },
 
 	{ MODKEY,                       XK_1,      focusnthmon,    {.i  = 3 } }, //SONY (L)
