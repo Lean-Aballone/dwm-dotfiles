@@ -138,15 +138,15 @@ static const Key keys[] = {
 
 	{ MODKEY,  						XK_z, 	   swapmon, 		{.i = 30} },
 
-	{ MODKEY,                       XK_1,      focusnthmon,    {.i  = 3 } }, //SONY (L)
-	{ MODKEY,                       XK_2,      focusnthmon,    {.i  = 2 } }, //LG (UP)
-	{ MODKEY,                       XK_3,      focusnthmon,    {.i  = 0 } }, //PHILPS (M)
-	{ MODKEY,                       XK_4,      focusnthmon,    {.i  = 1 } }, //SAMSUNG (R)
+	{ MODKEY,                       XK_1,      focusnthmon,    {.i  = 0 } }, //SONY (L)
+//	{ MODKEY,                       XK_2,      focusnthmon,    {.i  = 2 } }, //LG (UP)
+//	{ MODKEY,                       XK_3,      focusnthmon,    {.i  = 0 } }, //PHILPS (M)
+//	{ MODKEY,                       XK_4,      focusnthmon,    {.i  = 1 } }, //SAMSUNG (R)
 	
-	{ MODKEY|ShiftMask,             XK_1,      tagnthmon,      {.i  = 3 } }, //SONY (L)
-	{ MODKEY|ShiftMask,             XK_2,      tagnthmon,      {.i  = 2 } }, //LG (UP)
-	{ MODKEY|ShiftMask,             XK_3,      tagnthmon,      {.i  = 0 } }, //PHILPS (M)
-	{ MODKEY|ShiftMask,             XK_4,      tagnthmon,      {.i  = 1 } }, //SAMSUNG (R)
+	{ MODKEY|ShiftMask,             XK_1,      tagnthmon,      {.i  = 0 } }, //SONY (L)
+//	{ MODKEY|ShiftMask,             XK_2,      tagnthmon,      {.i  = 2 } }, //LG (UP)
+//	{ MODKEY|ShiftMask,             XK_3,      tagnthmon,      {.i  = 0 } }, //PHILPS (M)
+//	{ MODKEY|ShiftMask,             XK_4,      tagnthmon,      {.i  = 1 } }, //SAMSUNG (R)
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
